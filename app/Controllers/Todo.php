@@ -11,20 +11,28 @@ class Todo extends BaseController
     {
         $todomodel=new TodoModel();
         if(empty($todos=$todomodel->findall())){
-            $data['isempty']=true;
+            $data=[
+                'isempty'=>true,
+            ];
             return view('todo/index', $data);
         } else {
-            $data['todos']=$todomodel->orderBy('expired','ASC')->findall();
+            if(null!==$this->session->get('editid')){
+                $id=$this->session->get('editid');
+                $data['todotoedit']=$todomodel->where('id',$id)->first();
+                $this->session->remove('editid');
+            }
+            $data['todos']=$todomodel->orderBy('expires','ASC')->findall();
             return view('todo/index', $data);
         }
     }
 
     public function new(){
         $todomodel=new TodoModel();
-        $data=[
-            'todo'=>$this->request->getVar('todo'),
-            'expired'=>$this->request->getVar('expired'),
-        ];
+        if(!is_null($this->request->getVar('id'))){
+            $data['id']=$this->request->getVar('id');
+        }
+        $data['todo']=$this->request->getVar('todo');
+        $data['expires']=$this->request->getVar('expires');
         $todomodel->save($data);
         return redirect()->to('/');
     }
@@ -37,11 +45,19 @@ class Todo extends BaseController
                 'done'=>1,
             ];
             $todomodel->save($data);
-        }else{
+        }elseif(!empty($this->request->getVar('option') && $this->request->getVar('option')==='delete')){
             $data=[
-                'id'=>$this->request->getVar('id'),
+                'id'=>$this->request->getVar('id')
             ];
             $todomodel->delete($data);
+        }elseif(!empty($this->request->getVar('option') && $this->request->getVar('option')==='edit')){
+            $edit=[
+                'editid'=>$this->request->getVar('id')
+            ];
+            $this->session->set($edit);
+            return redirect()->to('/');
+        }else{
+            return redirect()->to('/');
         }
         return redirect()->to('/');
     }

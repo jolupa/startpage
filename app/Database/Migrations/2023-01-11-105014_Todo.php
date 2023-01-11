@@ -8,10 +8,11 @@ class Todo extends Migration
 {
     public function up()
     {
+        $this->forge->createDatabase('startpage', true);
         $this->forge->addField([
             'id'=>['type'=>'int', 'constraint'=>9, 'unsigned'=>true, 'auto_increment'=>true,],
             'todo'=>['type'=>'text',],
-            'expired'=>['type'=>'datetime',],
+            'expires'=>['type'=>'datetime',],
             'done'=>['type'=>'boolean', 'default'=>0,],
         ]);
         $this->forge->addKey('id', true);
@@ -20,8 +21,6 @@ class Todo extends Migration
 
     public function down()
     {
-        $this->db->disableForeignKeyChecks();
-            $this->forge->dropTable('todo');
-        $this->db->enableForeignKeyChecks();
+        $this->forge->dropTable('todo');
     }
 }

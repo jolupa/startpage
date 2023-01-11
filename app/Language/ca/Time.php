@@ -19,7 +19,7 @@ return [
     'invalidMinutes' => 'Els minuts han de ser entre 0 i 59. Donat: {0}',
     'invalidSeconds' => 'Els segons han de ser entre 0 i 59. Donat: {0}',
     'years'          => '{0, plural, =1{# any} other{# anys}}',
-    'months'         => '{0, plural, =1{# mes} other{# mes}}',
+    'months'         => '{0, plural, =1{# mes} other{# mesos}}',
     'weeks'          => '{0, plural, =1{# setmana} other{# setmanes}}',
     'days'           => '{0, plural, =1{# dia} other{# dies}}',
     'hours'          => '{0, plural, =1{# hora} other{# hores}}',
